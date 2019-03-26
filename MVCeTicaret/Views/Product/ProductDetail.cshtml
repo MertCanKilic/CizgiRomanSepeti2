@@ -1,0 +1,131 @@
+﻿@model MVCeTicaret.Models.Product
+
+@{
+    ViewBag.Title = "ProductDetail";
+}
+
+<div class="container">
+    <div class="row" style="margin-top:50px;">
+        <div class="col-md-4">
+            <img src="@Url.Content(Model.ImageUrl)" alt="@Url.Content(Model.AltText)" class="img-thumbnail" />
+        </div>
+        <div class="col-md-8">
+            <h2>@Model.Name</h2>
+            @{
+                for (int i = 0; i < 5; i++)
+                {
+                    <span class="glyphicon glyphicon-star" style="font-size:17pt;"></span>
+                }
+            }
+            <br /><br /><br />
+
+            <p class="lead">
+                <strong>Fiyatı: </strong>@string.Format("{0:C2}", Model.UnitPrice)
+            </p>
+            <p class="lead">
+                <span style="background-color:lightgray;">
+                    <strong>Stok Miktarı: </strong>@Model.UnitsInStock @Model.QuantityPerUnit
+                </span>
+            </p>
+
+            @using (Html.BeginForm("AddToCart", "Shopping", new { id = Model.ProductID }, FormMethod.Post))
+            {
+                <p class="lead">
+                    <strong>Miktar: </strong>
+                    @{
+                        if (Model.UnitsInStock == 0)
+                        {
+                            <input type="number" name="quantity" value="0" min="0" max="@Model.UnitsInStock" onchange="denetle(this, @Model.UnitsInStock)" />
+                        }
+                        else
+                        {
+                            <input type="number" name="quantity" value="1" min="1" max="@Model.UnitsInStock" onchange="denetle(this, @Model.UnitsInStock)"/>
+                        }
+                    }
+                </p>
+
+                <br /><br />
+
+                if (Model.UnitsInStock == 0)
+                {
+                    <button type="submit" class="btn btn-success btn-lg" disabled>Sepete Ekle</button>
+                }
+                else
+                {
+                    <button type="submit" class="btn btn-success btn-lg">Sepete Ekle</button>
+                }
+
+                <a href="@Url.Action("AddToWishlist", "Shopping", new { id = Model.ProductID })" class="btn btn-warning btn-lg">İstek Listesine Ekle</a>
+                }
+        </div>
+    </div>
+    <hr />
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <ul class="nav nav-tabs">
+                <li class="active">
+                    <a href="#description" data-toggle="tab">Ürün Açıklaması</a>
+                </li>
+                <li>
+                    <a href="#reviews" data-toggle="tab">Yorumlar</a>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <div class="tab-pane fade in active" id="description" style="margin-top:20px;">
+                    @Html.Raw(Model.LongDescription)
+                </div>
+                <div class="tab-pane fade" id="reviews" style="margin-top:20px;">
+                    <ul>
+                        @{
+                            foreach (var item in ViewData["Reviews"] as IEnumerable<MVCeTicaret.Models.Review>)
+                            {
+                                <li>
+                                    <p><strong>@item.Name</strong></p>
+                                    <p>@item.Comment</p>
+                                </li>
+                            }
+                        }
+                    </ul>
+
+                    <hr />
+
+                    @{
+                        if (Session["OnlineKullanici"] != null)
+                        {
+                            <h4>YORUM EKLE</h4>
+                            <hr />
+
+                            using (Html.BeginForm("AddReview", "Product", new { id = Model.ProductID }, FormMethod.Post))
+                            {
+                                <p>
+                                    <strong>Ürünü Oyla: </strong>
+                                    <input type="number" min="1" max="5" value="5" class="form-control" name="rate" />
+                                </p>
+                                <p>
+                                    <strong>Adınız: </strong>
+                                    <input type="text" name="name" class="form-control" />
+                                </p>
+                                <p>
+                                    <strong>Yorumunuz: </strong>
+                                    <textarea rows="3" name="review" class="form-control"></textarea>
+                                </p>
+                                <input type="submit" class="btn btn-info form-control" value="EKLE" />
+                            }
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts{
+    <script>
+        function denetle(inputElement, maxValue) {
+            var value = $(inputElement).val();
+            if (value > maxValue) {
+                $(inputElement).val(maxValue);
+            }
+        }
+    </script>    
+}

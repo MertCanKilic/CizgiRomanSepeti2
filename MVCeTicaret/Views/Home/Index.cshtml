@@ -1,0 +1,90 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<h2>EN'LERİMİZ</h2>
+
+<div class="row" style="margin-top:50px;">
+    <ul class="nav nav-tabs" role="tablist">
+        <li role="presentation" class="active">
+            <a href="#uzak" aria-controls="uzakdogu" role="tab" data-toggle="tab">Uzakdoğu Çizgi Romanı</a>
+        </li>
+        <li role="presentation">
+            <a href="#amerikan" aria-controls="amerikan" role="tab" data-toggle="tab">Amerikan Çizgi Roman</a>
+        </li>
+        <li role="presentation">
+            <a href="#bagimsiz" aria-controls="bagimsiz" role="tab" data-toggle="tab">Bağımsız Çizgi Roman</a>
+        </li>
+    </ul>
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane fade in active" id="klasik">
+            @{
+                foreach (var item in TempData["Uzakdogu"] as IEnumerable<MVCeTicaret.Models.Product>)
+                {
+                    <div class="col-md-3">
+                        <div class="thumbnail">
+                            <img src="@Url.Content(item.ImageUrl)" alt="@Url.Content(item.AltText)" />
+                            <div class="caption">
+                                <h4 style="height:70px;">
+                                    @item.Name - @string.Format("{0:C2}", item.UnitPrice)
+                                </h4>
+                                <p style="height:60px;overflow:auto;">
+                                    @item.ShortDescription
+                                </p>
+                                <p>
+                                    @Html.ActionLink("Ürün Detayı", "ProductDetail", "Product", new { id = item.ProductID }, new { @class = "btn btn-primary form-control" })
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="elektro">
+            @{
+                foreach (var item in TempData["Amerikan"] as IEnumerable<MVCeTicaret.Models.Product>)
+                {
+                    <div class="col-md-3">
+                        <div class="thumbnail">
+                            <img src="@Url.Content(item.ImageUrl)" alt="@Url.Content(item.AltText)" />
+                            <div class="caption">
+                                <h4 style="height:70px;">
+                                    @item.Name - @string.Format("{0:C2}", item.UnitPrice)
+                                </h4>
+                                <p style="height:60px;overflow:auto;">
+                                    @item.ShortDescription
+                                </p>
+                                <p>
+                                    @Html.ActionLink("Ürün Detayı", "ProductDetail", "Product", new { id = item.ProductID }, new { @class = "btn btn-primary form-control" })
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <div role="tabpanel" class="tab-pane fade" id="bas">
+            @{
+                foreach (var item in TempData["Bagimsiz"] as IEnumerable<MVCeTicaret.Models.Product>)
+                {
+                    <div class="col-md-3">
+                        <div class="thumbnail">
+                            <img src="@Url.Content(item.ImageUrl)" alt="@Url.Content(item.AltText)" />
+                            <div class="caption">
+                                <h4 style="height:70px;">
+                                    @item.Name - @string.Format("{0:C2}", item.UnitPrice)
+                                </h4>
+                                <p style="height:60px;overflow:auto;">
+                                    @item.ShortDescription
+                                </p>
+                                <p>
+                                    @Html.ActionLink("Ürün Detayı", "ProductDetail", "Product", new { id = item.ProductID }, new { @class = "btn btn-primary form-control" })
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</div>
